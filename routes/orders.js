@@ -9,19 +9,8 @@ const router = new Router();
 // export our router to be mounted by the parent application
 module.exports = router;
 
-// GET individual order
-router.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { rows } = await db.query("SELECT * FROM orders WHERE id = $1", [id]);
-    res.send(rows[0]);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
-});
-
-// GET all orders
+// @route   GET api/orders
+// desc     Get all orders
 router.get("/", async (req, res) => {
   try {
     const { rows } = await db.query("SELECT * FROM orders");

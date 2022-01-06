@@ -20,3 +20,14 @@ router.get("/:id", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+// GET all orders
+router.get("/", async (req, res) => {
+  try {
+    const { rows } = await db.query("SELECT * FROM orders");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});

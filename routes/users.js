@@ -11,13 +11,23 @@ module.exports = router;
 
 // GET individual user
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-  res.send(rows[0]);
+  try {
+    const { id } = req.params;
+    const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
+    res.send(rows[0]);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });
 
 // GET all users
 router.get("/", async (req, res) => {
-  const { rows } = await db.query("SELECT * FROM users");
-  res.send(rows);
+  try {
+    const { rows } = await db.query("SELECT * FROM users");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
 });

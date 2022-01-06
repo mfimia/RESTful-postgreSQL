@@ -73,3 +73,17 @@ router.put("/:id", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+// @route   DELETE api/orders
+// desc     Delete one order (with id)
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.query("DELETE FROM orders WHERE id = $1", [id]);
+    const { rows } = await db.query("SELECT * FROM orders");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});

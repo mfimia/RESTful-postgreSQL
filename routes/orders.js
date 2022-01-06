@@ -51,3 +51,25 @@ router.post("/", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+// @route   PUT api/orders
+// desc     Edit one order (with id)
+router.put("/:id", async (req, res) => {
+  const { id } = await req.params;
+  const values = [({ price, date, user_id } = await req.body)];
+
+  try {
+    Object.keys(values[0]).forEach((key, i) => {
+      db.query(`UPDATE orders SET ${key} = $2 WHERE id = $1`, [
+        id,
+        Object.values(values[0])[i],
+      ]);
+    });
+
+    const { rows } = await db.query("SELECT * FROM orders");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});

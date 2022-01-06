@@ -9,7 +9,7 @@
     "nodemon": "^2.0.15"
   },
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js"
+    "start": "node app.js",
+    "server": "nodemon app.js"
   }
 }

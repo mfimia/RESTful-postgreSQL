@@ -33,3 +33,21 @@ router.get("/:id", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+// @route   POST api/orders
+// desc     Create a new order
+router.post("/", async (req, res) => {
+  const { price, date, user_id } = req.body;
+  const query = {
+    text: "INSERT INTO orders (price, date, user_id) VALUES ($1, $2, $3)",
+    values: [price, date, user_id],
+  };
+  try {
+    await db.query(query);
+    const { rows } = await db.query("SELECT * FROM orders");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});

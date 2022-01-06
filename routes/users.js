@@ -52,16 +52,20 @@ router.post("/", async (req, res) => {
   }
 });
 
+// ---------- BUG: If no value provided, it gets set to null in db
 // @route   PUT api/users
 // desc     Edit one user (with id)
 router.put("/:id", async (req, res) => {
   const { firstName, lastName, age } = req.body;
+  // console.log(firstName, lastName, age, typeof age);
   const { id } = req.params;
+  // const prev = await db.query("SELECT * FROM users WHERE id = $1", [id]);
   const query = {
     text: "UPDATE users SET first_name = $2, last_name = $3, age = $4 WHERE id = $1",
     values: [id, firstName, lastName, age],
   };
   try {
+    // console.log(query);
     await db.query(query);
     const { rows } = await db.query("SELECT * FROM users");
     res.send(rows);

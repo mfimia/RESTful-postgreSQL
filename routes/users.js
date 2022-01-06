@@ -54,6 +54,22 @@ router.post("/", async (req, res) => {
 
 // @route   PUT api/users
 // desc     Edit one user (with id)
+router.put("/:id", async (req, res) => {
+  const { firstName, lastName, age } = req.body;
+  const { id } = req.params;
+  const query = {
+    text: "UPDATE users SET first_name = $2, last_name = $3, age = $4 WHERE id = $1",
+    values: [id, firstName, lastName, age],
+  };
+  try {
+    await db.query(query);
+    const { rows } = await db.query("SELECT * FROM users");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // @route   DELETE api/users
 // desc     Delete one user (with id)

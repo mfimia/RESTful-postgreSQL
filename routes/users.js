@@ -9,7 +9,20 @@ const router = new Router();
 // export our router to be mounted by the parent application
 module.exports = router;
 
-// GET individual user
+// @route   GET api/users
+// desc     Get all users
+router.get("/", async (req, res) => {
+  try {
+    const { rows } = await db.query("SELECT * FROM users");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route   GET api/users
+// desc     Get individual user
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -21,9 +34,16 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// GET all users
-router.get("/", async (req, res) => {
+// @route   POST api/users
+// desc     Create a new user
+router.post("/", async (req, res) => {
+  const { firstName, lastName, age } = req.body;
+  const query = {
+    text: "INSERT INTO users (first_name, last_name, age) VALUES ($1, $2, $3)",
+    values: [firstName, lastName, age],
+  };
   try {
+    await db.query(query);
     const { rows } = await db.query("SELECT * FROM users");
     res.send(rows);
   } catch (err) {
@@ -31,3 +51,9 @@ router.get("/", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+// @route   PUT api/users
+// desc     Edit one user (with id)
+
+// @route   DELETE api/users
+// desc     Delete one user (with id)

@@ -15,3 +15,9 @@ router.get("/:id", async (req, res) => {
   const { rows } = await db.query("SELECT * FROM users WHERE id = $1", [id]);
   res.send(rows[0]);
 });
+
+// GET all users
+router.get("/", async (req, res) => {
+  const { rows } = await db.query("SELECT * FROM users");
+  res.send(rows);
+});

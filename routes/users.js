@@ -60,7 +60,6 @@ router.put("/:id", async (req, res) => {
 
   try {
     Object.keys(values[0]).forEach((key, i) => {
-      console.log(key, Object.values(values[0])[i]);
       db.query(`UPDATE users SET ${key} = $2 WHERE id = $1`, [
         id,
         Object.values(values[0])[i],
@@ -77,3 +76,17 @@ router.put("/:id", async (req, res) => {
 
 // @route   DELETE api/users
 // desc     Delete one user (with id)
+
+// @route   GET api/users
+// desc     Get individual user
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    await db.query("DELETE FROM users WHERE id = $1", [id]);
+    const { rows } = await db.query("SELECT * FROM users");
+    res.send(rows);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
